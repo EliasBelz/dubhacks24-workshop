@@ -1,0 +1,4 @@
+protobuf==5.28.2
+python-dotenv==1.0.1
+streamlit==1.25.0
+streamlit_chat==0.1.1
