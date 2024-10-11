@@ -33,7 +33,7 @@ google_ef  = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=os.
 # Vector database /!\ NOTE: must load_data.py first /!\ uncomment the following lines if you the collections
 
 # client = chromadb.PersistentClient(path="./data/vectorDB")
-# collection = client.get_collection(name="class_db", embedding_function=google_ef)
+# collection = client.get_collection(name="my_collection", embedding_function=google_ef)
 
 #=====================================================#
 #                     Chat Code                       #
