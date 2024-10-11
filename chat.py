@@ -30,9 +30,10 @@ model = genai.GenerativeModel(
 # Embedding function for vector queries
 google_ef  = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=os.environ["API_KEY"])
 
-# Vector database /!\ NOTE: must load_data.py first /!\
-client = chromadb.PersistentClient(path="./data/vectorDB")
-collection = client.get_collection(name="class_db", embedding_function=google_ef)
+# Vector database /!\ NOTE: must load_data.py first /!\ uncomment the following lines if you the collections
+
+# client = chromadb.PersistentClient(path="./data/vectorDB")
+# collection = client.get_collection(name="class_db", embedding_function=google_ef)
 
 #=====================================================#
 #                     Chat Code                       #
@@ -110,7 +111,7 @@ with st.sidebar:
     st.markdown("Make something cool using generative AI")
     st.markdown("---")
     st.markdown("Created by Elias Belzberg for CSEED x Dubhacks 24")
-    st.markdown("[Code available here!](https://github.com/EliasBelz/dubhacks24-workshop)")
+    st.markdown("[Code available here!](https://github.com/EliasBelz/dubhacks24-workshop) Fork it and make it your own!")
     st.markdown("[Join the CSEED Discord!](https://discord.gg/xXUwERqHsz)\n")
     st.markdown("---")
     st.markdown("This demo uses:\n"

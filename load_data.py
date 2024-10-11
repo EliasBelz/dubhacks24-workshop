@@ -15,7 +15,7 @@ client = chromadb.PersistentClient(path="./data/vectorDB")
 
 # comment out the following line if you have already created the collection
 collection = client.create_collection(
-    name="class_db",
+    name="my_collection",
     embedding_function=google_ef,
     metadata={"hnsw:space": "cosine"}
 )

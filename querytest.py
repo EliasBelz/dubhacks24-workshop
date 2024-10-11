@@ -7,7 +7,7 @@ load_dotenv()
 
 google_ef  = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=os.environ["API_KEY"])
 client = chromadb.PersistentClient(path="./data/vectorDB")
-collection = client.get_collection(name="class_db", embedding_function=google_ef)
+collection = client.get_collection(name="my_collection", embedding_function=google_ef)
 
 
 results = collection.query(
