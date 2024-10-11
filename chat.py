@@ -65,6 +65,8 @@ def chat(user_input=""):
         user_input = st.session_state.input
     st.session_state.input = ""
 
+    # To use custom data, query the database here and combine it with the user input for the LLM to reference
+
     # Create chat completion based on message history + new user input
     completion = llm.send_message(user_input)
 

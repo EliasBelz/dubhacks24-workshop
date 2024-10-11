@@ -45,3 +45,12 @@ To set up the project, follow these steps:
    - Uncomment the chromadb lines at the top of `chat.py` to link the database.
    - Modify the `chat.py` file to customize the chatbot and make it your own! Use the `query_db` function to query the database and return results to the llm.
 
+### Ideas!
+- Ski shop chatbot
+- Beanie baby personality test
+- CSE course recommender
+
+## Resources
+- Streamlit docs: https://streamlit.io/
+- Chroma docs: https://docs.trychroma.com/
+- Gemini docs: https://ai.google.dev/gemini-api/docs/quickstart?lang=python
