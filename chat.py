@@ -3,21 +3,36 @@ from streamlit_chat import message
 import random
 import google.generativeai as genai
 import os
+import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
 from dotenv import load_dotenv
 
 load_dotenv()
 
-DEBUG = False
-MAX_CONTEXT = 5 # conversational memory window. First index is system call
+MAX_CONTEXT = 5 # conversational memory window.
 
 #=====================================================#
 #                      API SETUP                      #
 #=====================================================#
-genai.configure(api_key=os.environ["API_KEY"])
-model = genai.GenerativeModel(model_name="gemini-1.5-flash",
-                              # Replace system prompt
-                              system_instruction="You are a helpful chatbot that")
 
+# Gemini setup
+
+# Replace system prompt with your own
+system_prompt = "You are a helpful chatbot."
+
+genai.configure(api_key=os.environ["API_KEY"])
+
+model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    system_instruction=system_prompt
+)
+
+# Embedding function for vector queries
+google_ef  = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=os.environ["API_KEY"])
+
+# Vector database /!\ NOTE: must load_data.py first /!\
+client = chromadb.PersistentClient(path="./data/vectorDB")
+collection = client.get_collection(name="class_db", embedding_function=google_ef)
 
 #=====================================================#
 #                     Chat Code                       #
@@ -43,7 +58,7 @@ if "messages" not in st.session_state:
 
 llm = model.start_chat(history=st.session_state.messages)
 
-
+# Function to send a message to the LLM and update the UI
 def chat(user_input=""):
     if user_input == "":
         user_input = st.session_state.input
@@ -69,6 +84,16 @@ def chat(user_input=""):
     # Add user message to UI
     st.session_state.past.append(user_input)
 
+# Function to query the vector database
+# Returns a formatted string
+def query_db(query, n_results=1):
+    results = collection.query(
+        query_texts=[query],
+        n_results=n_results
+    )
+
+    return "".join(result for result in results["documents"][0])
+
 
 #=====================================================#
 #               Font-end, yup thats it!               #
@@ -76,20 +101,21 @@ def chat(user_input=""):
 
 st.set_page_config(page_title="Dubhacks 24 Demo", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
 
-st.header("CSEED Dubhacks 24 Generative AI Demo\n")
+st.header("CSEED x Dubhacks 24 Generative AI Demo\n")
 
 with st.sidebar:
     st.markdown("# About 🙌")
-    st.markdown("CSEED Dubhacks 24 Workshop")
+    st.markdown("CSEED x Dubhacks 24 Workshop")
     st.markdown("Feel free to edit any of this code for your own use!")
     st.markdown("Make something cool using generative AI")
     st.markdown("---")
-    st.markdown("Created by Elias Belzberg for CSEED")
-    st.markdown("Code available here!\n"
-                "[github.com/EliasBelz/ski-gpt](https://github.com/EliasBelz/dubhacks24-workshop)")
+    st.markdown("Created by Elias Belzberg for CSEED x Dubhacks 24")
+    st.markdown("[Code available here!](https://github.com/EliasBelz/dubhacks24-workshop)")
+    st.markdown("[Join the CSEED Discord!](https://discord.gg/xXUwERqHsz)\n")
     st.markdown("---")
     st.markdown("This demo uses:\n"
                 "- Google Gemini\n"
+                "- ChromaDB\n"
                 "- Streamlit")
     st.markdown("---")
 
