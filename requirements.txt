@@ -1,6 +1,6 @@
-protobuf==1.01
-python-dotenv==1.0.1
+protobuf
+python-dotenv
+chromadb
+google-generativeai
 streamlit==1.39.0
 streamlit_chat==0.1.1
-chromadb==0.5.12
-google-generativeai==0.83
