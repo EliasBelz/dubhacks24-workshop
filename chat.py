@@ -18,7 +18,7 @@ MAX_CONTEXT = 5 # conversational memory window.
 # Gemini setup
 
 # Replace system prompt with your own
-system_prompt = "You are a helpful chatbot."
+system_prompt = "You are a helpful chatbot that works at a rad ski shop."
 
 genai.configure(api_key=os.environ["API_KEY"])
 
@@ -32,8 +32,8 @@ google_ef  = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=os.
 
 # Vector database /!\ NOTE: must load_data.py first /!\ uncomment the following lines if you the collections
 
-# client = chromadb.PersistentClient(path="./data/vectorDB")
-# collection = client.get_collection(name="my_collection", embedding_function=google_ef)
+client = chromadb.PersistentClient(path="./data/vectorDB")
+collection = client.get_collection(name="my_collection", embedding_function=google_ef)
 
 #=====================================================#
 #                     Chat Code                       #
@@ -46,7 +46,7 @@ if 'past' not in st.session_state:
 # Add default welcome message. This can be useful for introducing your chatbot
 if 'generated' not in st.session_state:
     st.session_state['generated'] = [
-        "Beep boop -I'm a chatbot"
+        "Ask me about snowboards! I'm an expert! 🏂"
         ]
 
 # Pick random avatar
@@ -65,11 +65,19 @@ def chat(user_input=""):
         user_input = st.session_state.input
     st.session_state.input = ""
 
+    res = query_db(user_input, 4)
+
+    prompt = f"""
+    {user_input}\n
+    The following context might be when making a response only use relevant information:\n{res}\n
+    Always provide urls if you recommend a product.
+    """
+
     # Create chat completion based on message history + new user input
-    completion = llm.send_message(user_input)
+    completion = llm.send_message(prompt)
 
     # Add new user message to LLM message history
-    st.session_state.messages.append({"role": "user", "parts": user_input})
+    st.session_state.messages.append({"role": "user", "parts": prompt})
 
     # Add LLM response to message history
     st.session_state.messages.append({"role": "model", "parts": completion.text})
@@ -102,7 +110,7 @@ def query_db(query, n_results=1):
 
 st.set_page_config(page_title="Dubhacks 24 Demo", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
 
-st.header("CSEED x Dubhacks 24 Generative AI Demo\n")
+st.header("Ski-GPT 🎿\n")
 
 with st.sidebar:
     st.markdown("# About 🙌")
@@ -121,8 +129,12 @@ with st.sidebar:
     st.markdown("---")
 
 # We will get the user's input by calling the chat function
-input_text = st.text_input("Input a prompt here!",
-                                placeholder="Enter prompt: ", key="input", on_change=chat)
+input_text = st.text_input(
+    "Input a prompt here! For example: 'What is the best snowboard for beginners?'",
+    placeholder="Enter prompt: ",
+    key="input",
+    on_change=chat
+)
 
 if st.session_state['generated']:
     for i in range(len(st.session_state['generated'])-1, -1, -1):
