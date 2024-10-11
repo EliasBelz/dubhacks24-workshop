@@ -21,7 +21,7 @@ collection = client.create_collection(
 )
 
 # uncomment the following line if you have already created the collection
-# collection = client.get_collection(name="class_db", embedding_function=google_ef)
+# collection = client.get_collection(name="my_collection", embedding_function=google_ef)
 
 # Replace with the path to your CSV file
 df = pd.read_csv(FILE_PATH)
