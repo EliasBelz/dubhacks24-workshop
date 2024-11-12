@@ -1,5 +1,5 @@
 # CSEED x DUBHACKS 2024 Workshop
-Make a custom chatbot with Streamlit, Gemini, and ChromaDB!
+Make a custom chatbot with Streamlit, Gemini, and ChromaDB! Slides linked [here](https://docs.google.com/presentation/d/1jFNbSIocNmWeBUm8rXj-2dhJQXwKlwBIQTXAvzrmZY0/edit#slide=id.p)!
 <br/>
 <img src="img/chatbot.png" alt="Alt text" width="800"/>
 
